@@ -24,7 +24,27 @@ export class GroundStoryApi {
         url.searchParams.set('limit', String(limit));
         if (category) url.searchParams.set('category', category);
 
-        const headers = { Accept: 'application/json' };
+       const headers = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+};
+
+if (this.anonKey) {
+  headers.apikey = this.anonKey;
+  headers.Authorization = `Bearer ${this.anonKey}`;
+}
+
+const response = await fetch(this.apiUrl, {
+  method: 'POST',
+  headers,
+  body: JSON.stringify({
+    lat,
+    lon,
+    radius_miles: radiusMiles,
+    limit,
+    category: category || null,
+  }),
+});
         if (this.anonKey) {
           headers.apikey = this.anonKey;
           headers.Authorization = `Bearer ${this.anonKey}`;
