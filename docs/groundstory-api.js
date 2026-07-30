@@ -17,46 +17,42 @@ export class GroundStoryApi {
 
     if (this.apiUrl) {
       try {
-        const url = new URL(this.apiUrl);
-        url.searchParams.set('lat', String(lat));
-        url.searchParams.set('lon', String(lon));
-        url.searchParams.set('radius_miles', String(radiusMiles));
-        url.searchParams.set('limit', String(limit));
-        if (category) url.searchParams.set('category', category);
+              const headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      };
 
-       const headers = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-};
+      if (this.anonKey) {
+        headers.apikey = this.anonKey;
+        headers.Authorization = `Bearer ${this.anonKey}`;
+      }
 
-if (this.anonKey) {
-  headers.apikey = this.anonKey;
-  headers.Authorization = `Bearer ${this.anonKey}`;
-}
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          lat,
+          lon,
+          radius_miles: radiusMiles,
+          limit,
+          category: category || null,
+        }),
+      });
 
-const response = await fetch(this.apiUrl, {
-  method: 'POST',
-  headers,
-  body: JSON.stringify({
-    lat,
-    lon,
-    radius_miles: radiusMiles,
-    limit,
-    category: category || null,
-  }),
-});
-        if (this.anonKey) {
-          headers.apikey = this.anonKey;
-          headers.Authorization = `Bearer ${this.anonKey}`;
-        }
+      const body = await response.json().catch(() => ({}));
 
-        const response = await fetch(url, { headers });
-        const body = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(body.message || 'GroundStory API request failed.');
-        return body;
-      } catch (error) {
-        if (!this.allowWikimediaFallback) throw error;
-        console.warn('GroundStory API unavailable; using Wikimedia fallback.', error);
+      if (!response.ok) {
+        throw new Error(body.message || 'GroundStory API request failed.');
+      }
+
+      return body;
+    } catch (error) {
+      if (!this.allowWikimediaFallback) throw error;
+      console.warn(
+        'GroundStory API unavailable; using Wikimedia fallback.',
+        error
+      );
+    }
       }
     }
 
