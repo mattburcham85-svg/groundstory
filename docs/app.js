@@ -45,7 +45,7 @@ async function loadStories() {
     const result = await api.nearby({
       lat: current.lat,
       lon: current.lon,
-      radiusKm: Number($('radiusSelect').value),
+      radiusMiles: Number($('radiusSelect').value),
       limit: Number($('limitSelect').value)
     });
     let stories = result.stories || [];

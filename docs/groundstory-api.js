@@ -10,7 +10,7 @@ export class GroundStoryApi {
     this.allowWikimediaFallback = allowWikimediaFallback;
   }
 
-  async nearby({ lat, lon, radiusKm = 25, limit = 10, category = '' }) {
+  async nearby({ lat, lon, radiusMiles = 10, limit = 10, category = '' }) {
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
       throw new TypeError('Valid latitude and longitude are required.');
     }
@@ -20,7 +20,7 @@ export class GroundStoryApi {
         const url = new URL(this.apiUrl);
         url.searchParams.set('lat', String(lat));
         url.searchParams.set('lon', String(lon));
-        url.searchParams.set('radius_km', String(radiusKm));
+        url.searchParams.set('radius_miles', String(radiusMiles));
         url.searchParams.set('limit', String(limit));
         if (category) url.searchParams.set('category', category);
 
@@ -43,10 +43,10 @@ export class GroundStoryApi {
     if (!this.allowWikimediaFallback) {
       throw new Error('GroundStory API URL is not configured.');
     }
-    return this.nearbyFromWikimedia({ lat, lon, radiusKm, limit });
+    return this.nearbyFromWikimedia({ lat, lon, radiusMiles, limit });
   }
 
-  async nearbyFromWikimedia({ lat, lon, radiusKm, limit }) {
+  async nearbyFromWikimedia({ lat, lon, radiusMiles, limit }) {
     const url = new URL('https://en.wikipedia.org/w/api.php');
     url.search = new URLSearchParams({
       action: 'query',
@@ -55,7 +55,7 @@ export class GroundStoryApi {
       generator: 'geosearch',
       ggsprimary: 'all',
       ggsnamespace: '0',
-      ggsradius: String(Math.min(radiusKm * 1000, 10000)),
+      ggsradius: String(Math.min(radiusMiles * 1609.344, 10000)),
       ggslimit: String(Math.min(Math.max(limit, 1), 50)),
       ggscoord: `${lat}|${lon}`,
       prop: 'coordinates|pageimages|extracts|info',
@@ -95,7 +95,7 @@ export class GroundStoryApi {
     });
 
     return {
-      query: { lat, lon, radius_km: radiusKm, limit },
+      query: { lat, lon, radius_miles: radiusMiles, limit },
       stories,
       fallback: 'wikimedia',
       generated_at: new Date().toISOString(),

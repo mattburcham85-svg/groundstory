@@ -1,0 +1,40 @@
+GROUNDSTORY v0.2 — DO THIS NEXT
+================================
+
+PART A — PUT THE CLEAN FILES IN GITHUB
+
+1. Download and unzip groundstory-v0.2.zip.
+2. Open your GroundStory repository on GitHub.
+3. Click Add file > Upload files.
+4. Drag ALL contents from inside the unzipped groundstory-v0.2 folder into the upload area.
+   Important: drag the contents, not the outer groundstory-v0.2 folder itself.
+5. GitHub may ask whether to replace existing docs files. Replace them.
+6. Commit with the message: GroundStory v0.2 clean structure
+
+Your repository root should then show:
+
+  docs
+  project-docs
+  supabase
+  README.md
+  NEXT-STEPS.txt
+
+PART B — CREATE THE DATABASE IN SUPABASE
+
+1. In GitHub, open:
+   supabase > migrations > 001_groundstory.sql
+2. Click the Copy raw file button near the upper-right of the code.
+3. Return to Supabase > SQL Editor > New query.
+4. Paste into the large editor.
+5. Click Run.
+6. Stop if red error text appears and send a screenshot.
+
+PART C — ADD THE FIRST SAMPLE STORY
+
+1. In GitHub, open:
+   supabase > seed.sql
+2. Copy the raw file.
+3. In Supabase SQL Editor, click New query.
+4. Paste and click Run.
+
+Do not deploy the Edge Function yet. We will do that together after the database and seed both succeed.
