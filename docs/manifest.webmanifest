@@ -1,0 +1,9 @@
+{
+  "name": "GroundStory",
+  "short_name": "GroundStory",
+  "description": "Discover the stories beneath your feet.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f2efe6",
+  "theme_color": "#17251d"
+}
